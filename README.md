@@ -73,7 +73,7 @@ Book-Recommender-System/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/Book-Recommender-System.git
+   git clone https://github.com/codersacademy006/Book-Recommender-System.git
    cd Book-Recommender-System
    ```
 2. **Install dependencies:**

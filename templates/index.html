@@ -3,48 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Recommender System</title>
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #232526 0%, #0f2027 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .navbar {
+            background: #00a65a !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 2rem;
+            color: #fff !important;
+            letter-spacing: 1px;
+        }
+        .nav-link, .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            margin-right: 1rem;
+        }
+        .hero-section {
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            border-radius: 0 0 30px 30px;
+        }
+        .hero-content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            z-index: 2;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+        .btn-cta {
+            background: #00a65a;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 0.7rem 2.2rem;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+        .btn-cta:hover {
+            background: #007d43;
+            color: #fff;
+        }
+        .section-title {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .book-card {
+            background: #232526;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+            margin-bottom: 40px;
+            transition: transform 0.18s, box-shadow 0.18s;
+            overflow: hidden;
+        }
+        .book-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 8px 32px 0 rgba(0,166,90,0.25);
+        }
+        .book-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+        }
+        .book-card .card-body {
+            padding: 1.2rem 1rem 1rem 1rem;
+        }
+        .book-title {
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            min-height: 48px;
+        }
+        .book-author {
+            color: #00a65a;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .book-meta {
+            color: #bbb;
+            font-size: 0.98rem;
+        }
+        @media (max-width: 767px) {
+            .hero-section { height: 220px; }
+            .hero-content h1 { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+        }
+    </style>
 </head>
-<style>
-    .text-white{
-        color:white
-    }
-</style>
-<body style="background-color:black">
-
-    <nav class="navbar" style="background-color:#00a65a">
-        <a class="navbar-brand">My Book recommender</a>
-        <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/recommend">Recommend</a></li>
-            <li><a>Contact</a></li>
-        </ul>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">BookWise</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/recommend">Recommend</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="text-white" style="font-size:50px">Top 50 Books</h1>
-            </div>
+    <section class="hero-section mb-5">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Discover Your Next Favorite Book</h1>
+            <p>Personalized recommendations, trending reads, and the best books at your fingertips.</p>
+            <a href="/recommend" class="btn btn-cta">Get Recommendations</a>
+        </div>
+    </section>
 
+    <div class="container">
+        <h2 class="section-title">Top 50 Books</h2>
+        <div class="row">
             {% for i in range(book_name|length) %}
-                <div class="col-md-3" style="margin-top:50px">
-                    <div class="card">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card book-card h-100">
+                        <img class="card-img-top" src="{{ image[i] }}" alt="Book cover">
                         <div class="card-body">
-                            <img class="card-img-top" src="{{ image[i] }}">
-                            <p class="text-white">{{ book_name[i] }}</p>
-                            <h4 class="text-white">{{ author[i] }}</h4>
-                            <h4 class="text-white">Votes - {{ votes[i] }}</h4>
-                            <h4 class="text-white">Rating - {{ rating[i] }}</h4>
+                            <div class="book-title">{{ book_name[i] }}</div>
+                            <div class="book-author">by {{ author[i] }}</div>
+                            <div class="book-meta">Votes: {{ votes[i] }}</div>
+                            <div class="book-meta">Rating: {{ rating[i] }}</div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-
-
         </div>
     </div>
 
+    <footer class="text-center mt-5 mb-3" id="contact">
+        <p class="text-white-50">&copy; {{ year or 2025 }} BookWise. Made with <span style="color:#00a65a">&#10084;</span> for book lovers.</p>
+    </footer>
+
+    <!-- Bootstrap 4 JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

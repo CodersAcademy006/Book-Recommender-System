@@ -1,11 +1,16 @@
 from flask import Flask,render_template,request
 import pickle
 import numpy as np
+import os
 
-popular_df = pickle.load(open('popular.pkl','rb'))
-pt = pickle.load(open('pt.pkl','rb'))
-books = pickle.load(open('books.pkl','rb'))
-similarity_scores = pickle.load(open('similarity_scores.pkl','rb'))
+# Get the directory where this script is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Use correct relative paths for data files
+popular_df = pickle.load(open(os.path.join(BASE_DIR, 'popular.pkl'), 'rb'))
+pt = pickle.load(open(os.path.join(BASE_DIR, 'pt.pkl'), 'rb'))
+books = pickle.load(open(os.path.join(BASE_DIR, 'books.pkl'), 'rb'))
+similarity_scores = pickle.load(open(os.path.join(BASE_DIR, 'similarity_scores.pkl'), 'rb'))
 
 app = Flask(__name__)
 
@@ -26,6 +31,9 @@ def recommend_ui():
 @app.route('/recommend_books',methods=['post'])
 def recommend():
     user_input = request.form.get('user_input')
+    # Defensive: handle missing/invalid input
+    if user_input not in pt.index:
+        return render_template('recommend.html', data=[], error='Book not found. Please enter a valid book title.')
     index = np.where(pt.index == user_input)[0][0]
     similar_items = sorted(list(enumerate(similarity_scores[index])), key=lambda x: x[1], reverse=True)[1:5]
 
@@ -36,10 +44,7 @@ def recommend():
         item.extend(list(temp_df.drop_duplicates('Book-Title')['Book-Title'].values))
         item.extend(list(temp_df.drop_duplicates('Book-Title')['Book-Author'].values))
         item.extend(list(temp_df.drop_duplicates('Book-Title')['Image-URL-M'].values))
-
         data.append(item)
-
-    print(data)
 
     return render_template('recommend.html',data=data)
 
